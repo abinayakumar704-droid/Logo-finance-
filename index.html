@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0f4c81"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="LOGO Finance"/>
+<title>LOGO Finance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Segoe UI','Noto Sans Tamil',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh;overscroll-behavior:none;}
+input,button,select{font-family:inherit;}
+button:active{opacity:0.8;transform:scale(0.97);}
+.page{display:none;min-height:100vh;padding-bottom:90px;}
+.page.active{display:block;}
+.topbar{background:linear-gradient(135deg,#0f4c81,#1a6bb5);padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.15);}
+.topbar h1{flex:1;font-size:17px;font-weight:900;}
+.back-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;width:36px;height:36px;border-radius:10px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1px solid #e2e8f0;margin-bottom:14px;}
+.btn-primary{background:linear-gradient(135deg,#0f4c81,#1a6bb5);color:#fff;border:none;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:800;cursor:pointer;width:100%;}
+.btn-green{background:#16a34a;color:#fff;border:none;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:800;cursor:pointer;width:100%;}
+.btn-outline{background:#fff;color:#1e293b;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.btn-red-sm{background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;}
+.btn-edit-sm{background:#eff6ff;color:#0f4c81;border:none;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;}
+.input-field{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e2e8f0;font-size:14px;outline:none;background:#f8fafc;}
+.input-field:focus{border-color:#0f4c81;background:#fff;}
+.label{font-size:12px;font-weight:700;color:#64748b;margin-bottom:4px;display:block;}
+.fab{position:fixed;bottom:24px;right:20px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#0f4c81,#1a6bb5);border:none;color:#fff;font-size:28px;cursor:pointer;box-shadow:0 6px 24px rgba(15,76,129,0.5);z-index:100;display:flex;align-items:center;justify-content:center;}
+.stat-box{border-radius:12px;padding:12px 14px;}
+.progress-bar{background:#f1f5f9;border-radius:8px;height:10px;overflow:hidden;margin:6px 0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);border-radius:8px;transition:width 0.6s;}
+.client-card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,0.07);border:1px solid #e2e8f0;cursor:pointer;}
+.client-card:active{transform:scale(0.98);}
+.avatar{border-radius:50%;overflow:hidden;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid #0f4c81;flex-shrink:0;}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:30px;color:#fff;font-weight:700;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,0.3);z-index:9999;transition:opacity 0.3s;max-width:90vw;text-align:center;word-break:break-word;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:flex-end;}
+.modal{background:#fff;border-radius:24px 24px 0 0;padding:24px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal-center{border-radius:20px;margin:auto 20px;max-width:360px;text-align:center;}
+.payment-row{padding:12px 0;border-bottom:1px solid #f1f5f9;}
+.payment-row:last-child{border-bottom:none;}
+.quick-chip{padding:8px 14px;border-radius:20px;border:1px solid #0f4c81;background:#eff6ff;color:#0f4c81;font-weight:700;cursor:pointer;font-size:13px;}
+.quick-chip.active{background:#0f4c81;color:#fff;}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px 16px;border-top:1px solid #e2e8f0;display:flex;gap:10px;z-index:50;}
+.nav-tabs{display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:57px;z-index:40;}
+.nav-tab{flex:1;padding:12px 4px;border:none;background:none;font-size:12px;font-weight:600;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;}
+.nav-tab.active{color:#0f4c81;border-bottom:2px solid #0f4c81;font-weight:800;}
+.backup-btn{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:14px;width:100%;cursor:pointer;margin-bottom:10px;text-align:left;}
+.backup-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f1f5f9;}
+.settings-row:last-child{border-bottom:none;}
+.toggle{width:48px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.toggle.on{background:#0f4c81;}
+.toggle.on::after{transform:translateX(22px);}
+.toggle.off{background:#cbd5e1;}
+.lang-switch{display:flex;background:rgba(255,255,255,0.15);border-radius:20px;padding:3px;gap:2px;}
+.lang-btn{border:none;background:none;color:rgba(255,255,255,0.7);font-size:12px;font-weight:700;padding:4px 10px;border-radius:16px;cursor:pointer;transition:all 0.2s;}
+.lang-btn.active{background:#fff;color:#0f4c81;}
+/* GUIDE PAGE */
+.guide-step{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;border-left:4px solid #0f4c81;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.guide-step-num{width:32px;height:32px;border-radius:50%;background:#0f4c81;color:#fff;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.guide-tip{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:12px;margin-bottom:12px;}
+.guide-done{background:#dcfce7;border:1px solid #86efac;border-radius:12px;padding:12px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast" style="display:none;"></div>
+<div id="modal" class="overlay" style="display:none;" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- ═══════════ GUIDE PAGE (shown first) ═══════════ -->
+<div id="page-guide" class="page active">
+  <div style="background:linear-gradient(135deg,#0f4c81,#1a6bb5);padding:24px 16px 28px;color:#fff;text-align:center;">
+    <div style="width:64px;height:64px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+      <svg width="38" height="38" viewBox="0 0 38 38"><rect width="38" height="38" rx="8" fill="#0f4c81"/><text x="19" y="27" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="Arial">₹</text></svg>
+    </div>
+    <div style="font-size:24px;font-weight:900;">LOGO Finance</div>
+    <div style="font-size:14px;opacity:0.8;margin-top:4px;">சிறு நிதி மேலாளர்</div>
+    <div style="margin-top:12px;background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;font-size:13px;">
+      📱 முதல் முறை பயன்படுத்துவோருக்கான வழிகாட்டி
+    </div>
+  </div>
+
+  <div style="padding:16px;">
+
+    <!-- Install Banner -->
+    <div style="background:linear-gradient(135deg,#1e40af,#0f4c81);border-radius:16px;padding:16px;margin-bottom:16px;color:#fff;">
+      <div style="font-size:15px;font-weight:800;margin-bottom:6px;">📲 Phone-ல் Install செய்வது எப்படி?</div>
+      <div style="font-size:13px;opacity:0.9;margin-bottom:12px;">இந்த App-ஐ உங்கள் Home Screen-ல் வைக்கலாம்!</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:13px;">
+          <strong>படி 1:</strong> Chrome browser-ல் இந்த file-ஐ திறக்கவும்
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:13px;">
+          <strong>படி 2:</strong> மேலே உள்ள 3 புள்ளிகள் (<b>⋮</b>) அழுத்தவும்
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:13px;">
+          <strong>படி 3:</strong> "<b>Add to Home Screen</b>" தேர்வு செய்யவும்
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:13px;">
+          <strong>படி 4:</strong> "<b>Add</b>" அழுத்தவும் — முடிந்தது! ✓
+        </div>
+      </div>
+    </div>
+
+    <!-- How to use -->
+    <div style="font-size:15px;font-weight:800;color:#0f4c81;margin-bottom:12px;">📖 App பயன்படுத்துவது எப்படி?</div>
+
+    <div class="guide-step">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="guide-step-num">1</div>
+        <div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px;">புதிய Client சேர்க்க</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.7;">
+            🔵 கீழே உள்ள <b>+ பட்டன்</b> அழுத்தவும்<br/>
+            📝 பெயர், மொபைல், கடன் தொகை, வாரத் தவணை போடுங்கள்<br/>
+            📸 விரும்பினால் படம் எடுக்கலாம்<br/>
+            ✅ "<b>Client சேர்க்கவும்</b>" அழுத்தவும்
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="guide-step-num">2</div>
+        <div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px;">கட்டணம் பெற்றால் என்ன செய்வது?</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.7;">
+            👆 Client பெயரை அழுத்தவும்<br/>
+            💚 கீழே "<b>+ கட்டணம்</b>" பட்டன் அழுத்தவும்<br/>
+            💰 தொகை போட்டு "<b>சேர்</b>" அழுத்தவும்<br/>
+            📲 தானாகவே WhatsApp message போகும்!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="guide-step-num">3</div>
+        <div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px;">நிலுவை (Due) உள்ளவர்களை எப்படி தெரிந்துகொள்வது?</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.7;">
+            🔴 சிவப்பு badge = கட்டணம் தாமதம்<br/>
+            🟡 மஞ்சள் badge = 2 நாளில் கட்டணம் வர வேண்டும்<br/>
+            🟢 பச்சை badge = சரியான நேரத்தில் உள்ளனர்<br/>
+            📲 "<b>Reminder</b>" அழுத்தி WhatsApp அனுப்பவும்
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="guide-step-num">4</div>
+        <div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px;">வட்டி சேர்க்க வேண்டுமா?</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.7;">
+            👆 Client பெயரை அழுத்தவும்<br/>
+            🟠 கீழே "<b>📈 வட்டி</b>" பட்டன் அழுத்தவும்<br/>
+            💸 தொகை confirm செய்யவும்<br/>
+            📲 Client-க்கு message போகும்
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="guide-step-num">5</div>
+        <div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px;">தினமும் Backup எடுக்கவும்</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.7;">
+            ☁️ மேலே "<b>Backup</b>" tab அழுத்தவும்<br/>
+            💬 "<b>WhatsApp Backup</b>" அழுத்தவும்<br/>
+            📲 உங்கள் WhatsApp-க்கே file வரும்<br/>
+            ✅ Data எப்போதும் safe-ஆக இருக்கும்!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="guide-tip">
+      <div style="font-weight:800;font-size:14px;color:#92400e;margin-bottom:6px;">💡 முக்கிய குறிப்புகள்</div>
+      <div style="font-size:13px;color:#78350f;line-height:1.8;">
+        ✅ Settings-ல் உங்கள் WhatsApp நம்பர் போடுங்கள்<br/>
+        ✅ தினமும் ஒரு முறை Backup எடுங்கள்<br/>
+        ✅ Phone மாற்றும்போது Backup file transfer செய்யுங்கள்<br/>
+        ✅ Internet இல்லாமலும் App வேலை செய்யும்
+      </div>
+    </div>
+
+    <div class="guide-done">
+      <div style="font-size:15px;font-weight:800;color:#166534;margin-bottom:6px;">🎉 தயாரானீர்களா?</div>
+      <div style="font-size:13px;color:#166534;margin-bottom:12px;">இனி App-ஐ பயன்படுத்த தொடங்குங்கள்!</div>
+      <button onclick="startApp()" style="width:100%;background:#16a34a;color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:900;cursor:pointer;">
+        🚀 App திறக்கவும்
+      </button>
+    </div>
+
+    <div style="text-align:center;font-size:12px;color:#94a3b8;margin-top:8px;">
+      உதவி தேவையா? மீண்டும் இந்த guide பார்க்க Settings → Help
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="page-home" class="page">
+  <div style="background:linear-gradient(135deg,#0f4c81,#1a6bb5);padding:20px 16px 32px;color:#fff;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+          <svg width="26" height="26" viewBox="0 0 26 26"><rect width="26" height="26" rx="6" fill="#0f4c81"/><text x="13" y="18" text-anchor="middle" font-size="14" font-weight="900" fill="#fff" font-family="Arial">₹</text></svg>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;">LOGO Finance</div>
+          <div style="font-size:10px;opacity:0.7;" id="lastBackupLabel"></div>
+        </div>
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn active" id="btnTA" onclick="setLang('ta')">தமிழ்</button>
+        <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="summaryCards"></div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('clients')">👥 <span id="nt-c">Clients</span></button>
+    <button class="nav-tab" onclick="switchTab('backup')">☁️ <span id="nt-b">Backup</span></button>
+    <button class="nav-tab" onclick="switchTab('settings')">⚙️ <span id="nt-s">Settings</span></button>
+  </div>
+  <div id="tab-clients" style="padding:16px;">
+    <input class="input-field" id="searchInput" oninput="renderClients()" style="margin-bottom:14px;"/>
+    <div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:10px;" id="clientCount"></div>
+    <div id="clientList"></div>
+  </div>
+  <div id="tab-backup" style="padding:16px;display:none;">
+    <div class="card">
+      <div style="font-weight:800;font-size:16px;margin-bottom:4px;">☁️ Data Backup</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:16px;" id="bk-sub">உங்கள் data-ஐ safe-ஆக save செய்யுங்கள்</div>
+      <button class="backup-btn" onclick="backupWhatsApp()"><div class="backup-icon" style="background:#dcfce7;">💬</div><div><div style="font-weight:800;">WhatsApp Backup</div><div style="font-size:12px;color:#64748b;" id="bk-wa">உங்களுக்கே WhatsApp-ல் அனுப்பும்</div></div><div style="margin-left:auto;">→</div></button>
+      <button class="backup-btn" onclick="backupGoogleDrive()"><div class="backup-icon" style="background:#fef9c3;">📁</div><div><div style="font-weight:800;">Google Drive</div><div style="font-size:12px;color:#64748b;" id="bk-gd">File download → Drive upload</div></div><div style="margin-left:auto;">→</div></button>
+      <button class="backup-btn" onclick="backupEmail()"><div class="backup-icon" style="background:#eff6ff;">📧</div><div><div style="font-weight:800;">Email Backup</div><div style="font-size:12px;color:#64748b;" id="bk-em">Email-க்கு அனுப்பும்</div></div><div style="margin-left:auto;">→</div></button>
+      <button class="backup-btn" onclick="backupDownload()"><div class="backup-icon" style="background:#f3e8ff;">⬇️</div><div><div style="font-weight:800;" id="bk-dl">File Download</div><div style="font-size:12px;color:#64748b;">Phone-ல் save</div></div><div style="margin-left:auto;">→</div></button>
+      <div style="border-top:1px solid #f1f5f9;margin:16px 0;"></div>
+      <button class="backup-btn" onclick="document.getElementById('restoreInput').click()"><div class="backup-icon" style="background:#fee2e2;">🔄</div><div><div style="font-weight:800;" id="bk-res">Restore</div><div style="font-size:12px;color:#64748b;">Backup file load செய்</div></div><div style="margin-left:auto;">→</div></button>
+      <input type="file" id="restoreInput" accept=".json" style="display:none;" onchange="restoreBackup(this)"/>
+    </div>
+    <div class="card"><div style="font-weight:800;font-size:15px;margin-bottom:12px;">🕐 Backup வரலாறு</div><div id="backupHistory"></div></div>
+  </div>
+  <div id="tab-settings" style="padding:16px;display:none;">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 0 16px;border-bottom:1px solid #f1f5f9;margin-bottom:14px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#0f4c81,#1a6bb5);display:flex;align-items:center;justify-content:center;">
+          <svg width="30" height="30" viewBox="0 0 30 30"><text x="15" y="22" text-anchor="middle" font-size="18" font-weight="900" fill="#fff" font-family="Arial">₹</text></svg>
+        </div>
+        <div><div style="font-size:18px;font-weight:900;color:#0f4c81;">LOGO Finance</div><div style="font-size:12px;color:#64748b;">Small Finance Manager v5.0</div></div>
+      </div>
+      <div class="settings-row"><div><div style="font-weight:700;font-size:14px;" id="s-wa">📱 உங்கள் WhatsApp நம்பர்</div><div style="font-size:12px;color:#64748b;">Backup & reminder</div></div></div>
+      <input class="input-field" id="ownerMobile" type="tel" placeholder="10 இலக்க நம்பர்" style="margin-bottom:14px;" oninput="saveSettings()"/>
+      <div class="settings-row"><div><div style="font-weight:700;font-size:14px;" id="s-em">📧 உங்கள் Email</div></div></div>
+      <input class="input-field" id="ownerEmail" type="email" placeholder="Email address" style="margin-bottom:14px;" oninput="saveSettings()"/>
+      <div class="settings-row"><div><div style="font-weight:700;font-size:14px;" id="s-int">📈 Default வட்டி விகிதம் (%)</div><div style="font-size:12px;color:#64748b;">Late payment-க்கு வாரத்திற்கு</div></div></div>
+      <input class="input-field" id="defaultInterest" type="number" placeholder="உ.ம்: 2" style="margin-bottom:14px;" oninput="saveSettings()"/>
+      <div class="settings-row">
+        <div><div style="font-weight:700;font-size:14px;" id="s-rem">🔔 Daily Backup Reminder</div></div>
+        <button class="toggle off" id="reminderToggle" onclick="toggleReminder()"></button>
+      </div>
+      <div style="border-top:1px solid #f1f5f9;margin:14px 0;"></div>
+      <div class="settings-row">
+        <div><div style="font-weight:700;font-size:14px;">🌐 மொழி / Language</div></div>
+        <div style="display:flex;gap:8px;">
+          <button id="s-ta" onclick="setLang('ta')" style="padding:6px 14px;border-radius:20px;border:1.5px solid #0f4c81;background:#eff6ff;color:#0f4c81;font-weight:700;font-size:13px;cursor:pointer;">தமிழ்</button>
+          <button id="s-en" onclick="setLang('en')" style="padding:6px 14px;border-radius:20px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#64748b;font-weight:700;font-size:13px;cursor:pointer;">EN</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid #f1f5f9;margin:14px 0;"></div>
+      <!-- Help button -->
+      <div class="settings-row" style="cursor:pointer;" onclick="goTo('page-guide')">
+        <div><div style="font-weight:700;font-size:14px;color:#0f4c81;">📖 பயன்பாட்டு வழிகாட்டி</div><div style="font-size:12px;color:#64748b;">App பயன்படுத்துவது எப்படி என காண்க</div></div>
+        <div style="color:#0f4c81;">→</div>
+      </div>
+      <div style="border-top:1px solid #f1f5f9;margin:14px 0;"></div>
+      <div class="settings-row" style="cursor:pointer;" onclick="clearAllData()">
+        <div><div style="font-weight:700;font-size:14px;color:#dc2626;" id="s-del">🗑️ அனைத்தையும் நீக்கு</div></div>
+        <div style="color:#dc2626;">→</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;margin-bottom:12px;" id="s-info">📊 App தகவல்</div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="font-size:13px;color:#64748b;" id="s-tc">மொத்த Clients</span><span style="font-size:13px;font-weight:700;" id="info-clients">0</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="font-size:13px;color:#64748b;" id="s-tt">மொத்த பரிவர்த்தனைகள்</span><span style="font-size:13px;font-weight:700;" id="info-txns">0</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:13px;color:#64748b;" id="s-lb">கடைசி Backup</span><span style="font-size:13px;font-weight:700;" id="info-backup">-</span></div>
+    </div>
+  </div>
+  <button class="fab" id="homeFab">+</button>
+</div>
+
+<!-- ═══════════ ADD/EDIT CLIENT ═══════════ -->
+<div id="page-addClient" class="page">
+  <div class="topbar"><button class="back-btn" onclick="goTo('page-home')">←</button><h1 id="addClientTitle">புதிய Client</h1></div>
+  <div style="padding:16px;">
+    <div class="card">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:16px;">
+        <div id="photoPreview" onclick="document.getElementById('photoInput').click()" style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid #0f4c81;cursor:pointer;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:32px;">👤</div>
+        <span style="font-size:11px;color:#64748b;" id="ac-ph">படம் சேர்க்க கிளிக்</span>
+        <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="previewPhoto(this)"/>
+      </div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-n">பெயர் *</label><input class="input-field" id="cf_name" placeholder="Client பெயர்"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-m">மொபைல் நம்பர் *</label><input class="input-field" id="cf_mobile" type="tel" placeholder="10 இலக்க நம்பர்"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-l">மொத்த கடன் தொகை (₹) *</label><input class="input-field" id="cf_loan" type="number" placeholder="கொடுத்த தொகை"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-w">வாராந்திர தவணை (₹) *</label><input class="input-field" id="cf_weekly" type="number" placeholder="வார தவணை"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-d">தொடக்க தேதி</label><input class="input-field" id="cf_startDate" type="date"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="ac-i">வட்டி விகிதம் (% per week)</label><input class="input-field" id="cf_interest" type="number" placeholder="உ.ம்: 2"/></div>
+      <div style="margin-bottom:16px;"><label class="label" id="ac-no">குறிப்பு</label><input class="input-field" id="cf_notes" placeholder="விருப்பமான குறிப்பு"/></div>
+      <button class="btn-primary" id="saveClientBtn" onclick="saveClient()">✓ Client சேர்க்கவும்</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CLIENT DETAIL ═══════════ -->
+<div id="page-clientDetail" class="page">
+  <div class="topbar">
+    <button class="back-btn" onclick="goTo('page-home')">←</button>
+    <h1 id="detail_name"></h1>
+    <button style="background:rgba(255,255,255,0.15);border:none;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:14px;margin-right:4px;" onclick="editClient()">✏️</button>
+    <button style="background:rgba(255,107,107,0.25);border:none;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:14px;" onclick="confirmDelete()">🗑</button>
+  </div>
+  <div style="padding:16px 16px 100px;">
+    <div class="card" id="detailCard"></div>
+    <div class="card" id="paymentHistoryCard"></div>
+  </div>
+  <div class="bottom-bar">
+    <button class="btn-outline" style="flex:1;border-color:#25d366;color:#25d366;justify-content:center;" onclick="openWhatsApp()">💬</button>
+    <button class="btn-outline" style="flex:1;border-color:#ea580c;color:#ea580c;justify-content:center;" onclick="addInterestCharge()" id="cd-int">📈 வட்டி</button>
+    <button class="btn-primary" style="flex:2;" onclick="goToPayment()" id="cd-pay">+ கட்டணம்</button>
+  </div>
+</div>
+
+<!-- ═══════════ ADD/EDIT PAYMENT ═══════════ -->
+<div id="page-addPayment" class="page">
+  <div class="topbar"><button class="back-btn" onclick="goTo('page-clientDetail')">←</button><h1 id="payPageTitle">கட்டணம் சேர்க்க</h1></div>
+  <div style="padding:16px;">
+    <div class="card">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;">
+        <div id="pay_avatar" style="width:48px;height:48px;" class="avatar">👤</div>
+        <div><div style="font-weight:800;" id="pay_name"></div><div style="font-size:12px;color:#dc2626;font-weight:700;" id="pay_balance"></div></div>
+      </div>
+      <div id="quickChipsWrap" style="margin-bottom:12px;">
+        <label class="label" id="pf-ql">விரைவு தேர்வு</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="quickChips"></div>
+      </div>
+      <div style="margin-bottom:12px;"><label class="label" id="pf-al">கட்டணம் (₹) *</label><input class="input-field" id="pf_amount" type="number" placeholder="தொகை உள்ளிடுங்கள்"/></div>
+      <div style="margin-bottom:12px;"><label class="label" id="pf-dl">தேதி</label><input class="input-field" id="pf_date" type="date"/></div>
+      <div style="margin-bottom:14px;"><label class="label" id="pf-nl">குறிப்பு</label><input class="input-field" id="pf_note" placeholder="விருப்பமான குறிப்பு"/></div>
+      <div id="whatsappNotice" style="background:#eff6ff;border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;color:#0f4c81;">📲 கட்டணம் சேர்த்தவுடன் WhatsApp message தானாக போகும்!</div>
+      <button class="btn-green" id="savePayBtn" onclick="savePayment()">✓ கட்டணம் சேர் & Message அனுப்பு</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── LANG STRINGS ──────────────────────────────────────
+const L={
+  ta:{
+    totalLoan:"மொத்த கடன்",collected:"வசூலித்தது",balance:"மீதம்",
+    search:"🔍 பெயர் அல்லது மொபைல் தேடுங்கள்...",
+    noClients:"Client இல்லை. + button அழுத்தி சேர்க்கவும்!",
+    clients:"CLIENTS",loan:"கடன்",remaining:"மீதம்",interest:"வட்டி",
+    paidPct:"% செலுத்தியாயிற்று",overdue:"⚠️ Due!",pending:"⚠️ நிலுவை",
+    given:"கொடுத்த தொகை",collected2:"வசூலித்தது",remaining2:"மீதமுள்ளது",
+    weekly:"வார தவணை",totalInt:"மொத்த வட்டி",nextPay:"📅 அடுத்த கட்டணம்",
+    late:"⚠️ கட்டணம் தாமதம்!",daysLeft:"நாட்களில்",
+    collect:"வசூல்",reminder:"📲 Reminder",
+    payHistory:"📋 கட்டண வரலாறு",noPay:"இன்னும் கட்டணம் வரவில்லை",
+    editBtn:"✏️ Edit",deleteBtn:"🗑 நீக்கு",intTag:"வட்டி",
+    addClient:"புதிய Client சேர்க்க",editClient:"Client Edit செய்க",
+    saveClient:"✓ Client சேர்க்கவும்",updateClient:"✓ மாற்றங்கள் சேமி",
+    fillAll:"கட்டாய தகவல்களை நிரப்பவும்!",
+    added:"சேர்க்கப்பட்டார்! ✓",updated:"Update ஆனது! ✓",
+    addPay:"கட்டணம் சேர்க்க",editPay:"கட்டணம் Edit செய்க",
+    quickSel:"விரைவு தேர்வு",amtLbl:"கட்டணம் (₹) *",
+    waNotice:"📲 கட்டணம் சேர்த்தவுடன் WhatsApp message தானாக போகும்!",
+    savePay:"✓ கட்டணம் சேர் & Message அனுப்பு",updatePay:"✓ மாற்றங்கள் சேமி",
+    enterAmt:"தொகை உள்ளிடவும்!",payAdded:"கட்டணம் சேர்க்கப்பட்டது! ✓",payUpdated:"Update ஆனது! ✓",
+    addInt:"📈 வட்டி",intTitle:"📈 வட்டி சேர்க்க",
+    weeksLate:"வார தாமதம்",lateFee:"தாமத வட்டி",
+    intAmtLbl:"வட்டி தொகை (₹) *",intErr:"வட்டி தொகை உள்ளிடவும்!",
+    intAdded:"வட்டி சேர்க்கப்பட்டது! ✓",addIntBtn:"📈 வட்டி சேர்",cancel:"ரத்து",
+    delTitle:"நீக்கணுமா?",delMsg:"ஐ நீக்கினால் அனைத்தும் போகும்!",
+    delPayTitle:"கட்டணம் நீக்கணுமா?",delPayMsg:"இந்த entry நீக்கப்படும்",
+    del:"நீக்கு",deleted:"நீக்கப்பட்டது",
+    waNoNum:"Settings-ல் WhatsApp நம்பர் சேர்க்கவும்!",
+    emNoAddr:"Settings-ல் Email சேர்க்கவும்!",
+    waDone:"WhatsApp Backup! ✓",emDone:"Email அனுப்பப்படுகிறது ✓",dlDone:"Download ஆகிறது ✓",
+    restoreTitle:"Restore செய்யணுமா?",restoreMsg:"clients restore ஆகும்",restoreBtn:"Restore",
+    restoreDone:"clients restore ஆனது! ✓",badFile:"தவறான file!",
+    gdTitle:"Google Drive Backup",
+    gdSteps:"1️⃣ File download ஆகிறது<br/>2️⃣ Google Drive திறக்கவும்<br/>3️⃣ + → Upload → file select",
+    gdOpen:"📁 Drive திற",ok:"சரி",
+    remOn:"Reminder ON ✓",remOff:"Reminder OFF",
+    delAll:"அனைத்தையும் நீக்கணுமா?",delAllMsg:"எல்லா data வும் போகும்!",
+    delAllDone:"நீக்கப்பட்டது",noBackup:"Backup இல்லை",
+    backupPrefix:"🔒 Backup: ",noBackupYet:"⚠️ Backup எடுக்கவில்லை",
+    reminderMsg:"📢 இன்று Backup எடுக்கவில்லை!",
+    noLastBackup:"இல்லை",
+  },
+  en:{
+    totalLoan:"Total Loan",collected:"Collected",balance:"Balance",
+    search:"🔍 Search name or mobile...",
+    noClients:"No clients. Tap + to add!",
+    clients:"CLIENTS",loan:"Loan",remaining:"Balance",interest:"Interest",
+    paidPct:"% paid",overdue:"⚠️ Due!",pending:"⚠️ Pending",
+    given:"Loan Given",collected2:"Collected",remaining2:"Remaining",
+    weekly:"Weekly EMI",totalInt:"Total Interest",nextPay:"📅 Next Payment",
+    late:"⚠️ Payment Overdue!",daysLeft:"days left",
+    collect:"Collect",reminder:"📲 Remind",
+    payHistory:"📋 Payment History",noPay:"No payments yet",
+    editBtn:"✏️ Edit",deleteBtn:"🗑 Delete",intTag:"Interest",
+    addClient:"Add New Client",editClient:"Edit Client",
+    saveClient:"✓ Add Client",updateClient:"✓ Save Changes",
+    fillAll:"Please fill all required fields!",
+    added:"Client added! ✓",updated:"Updated! ✓",
+    addPay:"Add Payment",editPay:"Edit Payment",
+    quickSel:"Quick Select",amtLbl:"Amount (₹) *",
+    waNotice:"📲 WhatsApp message will be sent automatically!",
+    savePay:"✓ Add Payment & Send Message",updatePay:"✓ Save Changes",
+    enterAmt:"Please enter amount!",payAdded:"Payment added! ✓",payUpdated:"Payment updated! ✓",
+    addInt:"📈 Interest",intTitle:"📈 Add Interest",
+    weeksLate:"weeks overdue",lateFee:"Late interest",
+    intAmtLbl:"Interest Amount (₹) *",intErr:"Please enter interest amount!",
+    intAdded:"Interest added! ✓",addIntBtn:"📈 Add Interest",cancel:"Cancel",
+    delTitle:"Delete?",delMsg:"will be permanently deleted!",
+    delPayTitle:"Delete Payment?",delPayMsg:"This entry will be removed",
+    del:"Delete",deleted:"Deleted",
+    waNoNum:"Add WhatsApp number in Settings!",
+    emNoAddr:"Add Email in Settings!",
+    waDone:"WhatsApp Backup! ✓",emDone:"Email sending ✓",dlDone:"Downloading ✓",
+    restoreTitle:"Restore?",restoreMsg:"clients will be restored",restoreBtn:"Restore",
+    restoreDone:"clients restored! ✓",badFile:"Invalid file!",
+    gdTitle:"Google Drive Backup",
+    gdSteps:"1️⃣ File downloading<br/>2️⃣ Open Google Drive<br/>3️⃣ + → Upload → select file",
+    gdOpen:"📁 Open Drive",ok:"OK",
+    remOn:"Reminder ON ✓",remOff:"Reminder OFF",
+    delAll:"Delete Everything?",delAllMsg:"All data will be deleted!",
+    delAllDone:"Deleted",noBackup:"No backups yet",
+    backupPrefix:"🔒 Backup: ",noBackupYet:"⚠️ No backup yet",
+    reminderMsg:"📢 No backup today!",
+    noLastBackup:"None",
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────
+let clients=[],settings={ownerMobile:"",ownerEmail:"",reminderOn:false,defaultInterest:2,lang:"ta",firstTime:true};
+let backupHistory=[],selectedId=null,editingPaymentId=null,editingClientId=null,photoData="";
+let lang="ta";
+function l(k){return(L[lang]||L.ta)[k]||k;}
+
+function loadData(){
+  try{clients=JSON.parse(localStorage.getItem("sfm_clients")||"[]");}catch(e){clients=[];}
+  try{Object.assign(settings,JSON.parse(localStorage.getItem("sfm_settings")||"{}"));}catch(e){}
+  try{backupHistory=JSON.parse(localStorage.getItem("sfm_backupHistory")||"[]");}catch(e){backupHistory=[];}
+  lang=settings.lang||"ta";
+}
+function saveData(){localStorage.setItem("sfm_clients",JSON.stringify(clients));}
+function saveSettings(){
+  settings.ownerMobile=(document.getElementById("ownerMobile").value||"").trim();
+  settings.ownerEmail=(document.getElementById("ownerEmail").value||"").trim();
+  settings.defaultInterest=Number(document.getElementById("defaultInterest").value)||2;
+  settings.lang=lang;
+  localStorage.setItem("sfm_settings",JSON.stringify(settings));
+}
+function today(){return new Date().toISOString().slice(0,10);}
+function fmtINR(n){return "₹"+Number(n||0).toLocaleString("en-IN");}
+function getClient(){return clients.find(c=>c.id===selectedId);}
+
+// ── GUIDE ─────────────────────────────────────────────
+function startApp(){
+  settings.firstTime=false;
+  localStorage.setItem("sfm_settings",JSON.stringify(settings));
+  goTo("page-home");
+}
+
+// ── LANG ─────────────────────────────────────────────
+function setLang(lv){
+  lang=lv;settings.lang=lv;
+  localStorage.setItem("sfm_settings",JSON.stringify(settings));
+  applyLang();
+  renderHome();
+}
+function applyLang(){
+  const isTA=lang==="ta";
+  // header lang btns
+  document.getElementById("btnTA").className="lang-btn"+(isTA?" active":"");
+  document.getElementById("btnEN").className="lang-btn"+(!isTA?" active":"");
+  // settings lang btns
+  document.getElementById("s-ta").style.cssText=`padding:6px 14px;border-radius:20px;border:1.5px solid ${isTA?"#0f4c81":"#e2e8f0"};background:${isTA?"#eff6ff":"#f8fafc"};color:${isTA?"#0f4c81":"#64748b"};font-weight:700;font-size:13px;cursor:pointer;`;
+  document.getElementById("s-en").style.cssText=`padding:6px 14px;border-radius:20px;border:1.5px solid ${!isTA?"#0f4c81":"#e2e8f0"};background:${!isTA?"#eff6ff":"#f8fafc"};color:${!isTA?"#0f4c81":"#64748b"};font-weight:700;font-size:13px;cursor:pointer;`;
+  // search
+  const si=document.getElementById("searchInput");if(si)si.placeholder=l("search");
+  // nav
+  document.getElementById("nt-c").textContent=l("clients").charAt(0).toUpperCase()+l("clients").slice(1);
+  // bottom bar detail
+  const ci=document.getElementById("cd-int");if(ci)ci.textContent=l("addInt");
+  const cp=document.getElementById("cd-pay");if(cp)cp.textContent="+ "+l("collected2");
+  // add client labels
+  setText("ac-ph","photoHint"||"படம் சேர்க்க கிளிக்");
+}
+function setText(id,val){const el=document.getElementById(id);if(el&&typeof val==="string"&&val.length<5)return;if(el)el.textContent=lang==="ta"?"படம் சேர்க்க கிளிக்":"Click to add photo";}
+
+// ── STATS ─────────────────────────────────────────────
+function clientStats(c){
+  const pays=c.payments||[];
+  const normalPaid=pays.filter(p=>p.type!=="interest").reduce((s,p)=>s+Number(p.amount),0);
+  const intCharged=pays.filter(p=>p.type==="interest").reduce((s,p)=>s+Number(p.amount),0);
+  const totalDue=Number(c.loanAmount)+intCharged;
+  const balance=totalDue-normalPaid;
+  const weeksPassed=Math.max(0,Math.floor((new Date()-new Date(c.startDate))/(7*864e5)));
+  const totalExpected=Math.min(weeksPassed*Number(c.weeklyDue),Number(c.loanAmount));
+  const pending=Math.max(0,totalExpected-normalPaid);
+  return{totalPaid:normalPaid,balance,pending,nextDueDate:calcNextDue(c),interestCharged:intCharged,totalDue};
+}
+function calcNextDue(c){
+  let d=new Date(c.startDate);const now=new Date();
+  while(d<=now)d.setDate(d.getDate()+7);
+  return d.toISOString().slice(0,10);
+}
+function daysDiff(ds){return Math.ceil((new Date(ds)-new Date())/(1000*60*60*24));}
+function weeksLate(c){
+  const pays=(c.payments||[]).filter(p=>p.type!=="interest");
+  const last=pays.length?[...pays].sort((a,b)=>b.date.localeCompare(a.date))[0].date:c.startDate;
+  return Math.max(0,Math.floor((new Date()-new Date(last))/(7*864e5))-1);
+}
+
+// ── NAVIGATION ────────────────────────────────────────
+function goTo(pageId){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(pageId).classList.add("active");
+  window.scrollTo(0,0);
+  if(pageId==="page-home"){renderHome();loadSettingsUI();}
+  if(pageId==="page-clientDetail")renderDetail();
+  if(pageId==="page-addPayment")renderPaymentForm();
+  applyLang();
+}
+function switchTab(tab){
+  ["clients","backup","settings"].forEach(t=>{
+    document.getElementById("tab-"+t).style.display=t===tab?"block":"none";
+  });
+  document.querySelectorAll(".nav-tab").forEach((b,i)=>b.classList.toggle("active",["clients","backup","settings"][i]===tab));
+  const fab=document.getElementById("homeFab");if(fab)fab.style.display=tab==="clients"?"flex":"none";
+  if(tab==="backup")renderBackupHistory();
+  if(tab==="settings"){
+    loadSettingsUI();
+    document.getElementById("info-clients").textContent=clients.length;
+    document.getElementById("info-txns").textContent=clients.reduce((s,c)=>s+(c.payments||[]).length,0);
+    document.getElementById("info-backup").textContent=localStorage.getItem("sfm_lastBackup")||l("noLastBackup");
+  }
+}
+function loadSettingsUI(){
+  document.getElementById("ownerMobile").value=settings.ownerMobile||"";
+  document.getElementById("ownerEmail").value=settings.ownerEmail||"";
+  document.getElementById("defaultInterest").value=settings.defaultInterest||2;
+  const tg=document.getElementById("reminderToggle");if(tg)tg.className="toggle "+(settings.reminderOn?"on":"off");
+  applyLang();
+}
+function toggleReminder(){
+  settings.reminderOn=!settings.reminderOn;
+  document.getElementById("reminderToggle").className="toggle "+(settings.reminderOn?"on":"off");
+  localStorage.setItem("sfm_settings",JSON.stringify(settings));
+  showToast(settings.reminderOn?l("remOn"):l("remOff"),settings.reminderOn?"#16a34a":"#64748b");
+}
+
+// ── HOME ─────────────────────────────────────────────
+function renderHome(){
+  const tL=clients.reduce((s,c)=>s+Number(c.loanAmount),0);
+  const tP=clients.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.type!=="interest").reduce((a,p)=>a+Number(p.amount),0),0);
+  const tI=clients.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.type==="interest").reduce((a,p)=>a+Number(p.amount),0),0);
+  document.getElementById("summaryCards").innerHTML=`
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 8px;text-align:center;"><div>💰</div><div style="font-size:13px;font-weight:800;">${fmtINR(tL)}</div><div style="font-size:10px;opacity:0.8;">${l("totalLoan")}</div></div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 8px;text-align:center;"><div>✅</div><div style="font-size:13px;font-weight:800;">${fmtINR(tP)}</div><div style="font-size:10px;opacity:0.8;">${l("collected")}</div></div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 8px;text-align:center;"><div>🔴</div><div style="font-size:13px;font-weight:800;">${fmtINR(tL+tI-tP)}</div><div style="font-size:10px;opacity:0.8;">${l("balance")}</div></div>`;
+  const lb=localStorage.getItem("sfm_lastBackup");
+  const el=document.getElementById("lastBackupLabel");
+  if(el)el.textContent=lb?l("backupPrefix")+lb:l("noBackupYet");
+  renderClients();applyLang();
+}
+function renderClients(){
+  const q=(document.getElementById("searchInput")?document.getElementById("searchInput").value:"").toLowerCase();
+  const filtered=clients.filter(c=>c.name.toLowerCase().includes(q)||c.mobile.includes(q));
+  document.getElementById("clientCount").textContent=filtered.length+" "+l("clients");
+  if(!filtered.length){document.getElementById("clientList").innerHTML=`<div style="text-align:center;padding:40px;color:#64748b;"><div style="font-size:48px;">🏦</div><div style="margin-top:8px;">${l("noClients")}</div></div>`;return;}
+  document.getElementById("clientList").innerHTML=filtered.map(c=>{
+    const{totalPaid,balance,pending,nextDueDate,interestCharged}=clientStats(c);
+    const diff=daysDiff(nextDueDate);
+    const pct=Math.min(100,Math.round((totalPaid/(Number(c.loanAmount)+interestCharged||1))*100));
+    const dc=diff<=0?"#dc2626":diff<=2?"#ea580c":"#16a34a";
+    const db=diff<=0?"#fee2e2":diff<=2?"#ffedd5":"#dcfce7";
+    const av=c.photo?`<img src="${c.photo}" style="width:52px;height:52px;border-radius:50%;border:2px solid #0f4c81;object-fit:cover;flex-shrink:0;"/>`:`<div style="width:52px;height:52px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid #0f4c81;flex-shrink:0;">👤</div>`;
+    return`<div class="client-card" onclick="selectClient('${c.id}')">
+      <div style="display:flex;gap:12px;align-items:center;">${av}
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px;">
+            <div style="font-weight:800;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.name}</div>
+            <span style="background:${db};color:${dc};padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;">${diff<=0?l("overdue"):diff<=2?`⏰ ${diff}d`:`📅 ${diff}d`}</span>
+          </div>
+          <div style="font-size:12px;color:#64748b;">${c.mobile}</div>
+          <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#dc2626;font-weight:700;">🔴 ${l("loan")}: ${fmtINR(c.loanAmount)}</span>
+            <span style="font-size:12px;color:#16a34a;font-weight:700;">🟢 ${l("remaining")}: ${fmtINR(balance)}</span>
+          </div>
+          ${interestCharged>0?`<div style="font-size:11px;color:#ea580c;font-weight:700;margin-top:2px;">📈 ${l("interest")}: ${fmtINR(interestCharged)}</div>`:""}
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+          <div style="font-size:10px;color:#64748b;">${pct}${l("paidPct")}</div>
+        </div>
+      </div>
+      ${pending>0?`<div style="margin-top:8px;background:#fee2e2;border-radius:8px;padding:6px 10px;font-size:12px;color:#dc2626;font-weight:700;">${l("pending")}: ${fmtINR(pending)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+function selectClient(id){selectedId=id;goTo("page-clientDetail");}
+
+// ── ADD/EDIT CLIENT ───────────────────────────────────
+function goToAddClient(){
+  editingClientId=null;photoData="";
+  document.getElementById("addClientTitle").textContent=l("addClient");
+  document.getElementById("saveClientBtn").textContent=l("saveClient");
+  ["cf_name","cf_mobile","cf_loan","cf_weekly","cf_notes"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("cf_startDate").value=today();
+  document.getElementById("cf_interest").value=settings.defaultInterest||2;
+  document.getElementById("photoPreview").innerHTML="👤";
+  goTo("page-addClient");
+}
+function editClient(){
+  const c=getClient();if(!c)return;
+  editingClientId=c.id;photoData=c.photo||"";
+  document.getElementById("addClientTitle").textContent=l("editClient");
+  document.getElementById("saveClientBtn").textContent=l("updateClient");
+  document.getElementById("cf_name").value=c.name;
+  document.getElementById("cf_mobile").value=c.mobile;
+  document.getElementById("cf_loan").value=c.loanAmount;
+  document.getElementById("cf_weekly").value=c.weeklyDue;
+  document.getElementById("cf_startDate").value=c.startDate;
+  document.getElementById("cf_interest").value=c.interestRate||settings.defaultInterest||2;
+  document.getElementById("cf_notes").value=c.notes||"";
+  document.getElementById("photoPreview").innerHTML=c.photo?`<img src="${c.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`:"👤";
+  goTo("page-addClient");
+}
+function previewPhoto(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{photoData=e.target.result;document.getElementById("photoPreview").innerHTML=`<img src="${photoData}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;};
+  reader.readAsDataURL(file);
+}
+function saveClient(){
+  const name=document.getElementById("cf_name").value.trim();
+  const mobile=document.getElementById("cf_mobile").value.trim();
+  const loan=document.getElementById("cf_loan").value;
+  const weekly=document.getElementById("cf_weekly").value;
+  const startDate=document.getElementById("cf_startDate").value||today();
+  const interestRate=Number(document.getElementById("cf_interest").value)||settings.defaultInterest||2;
+  const notes=document.getElementById("cf_notes").value.trim();
+  if(!name||!mobile||!loan||!weekly){showToast(l("fillAll"),"#dc2626");return;}
+  if(editingClientId){
+    const idx=clients.findIndex(c=>c.id===editingClientId);
+    if(idx>=0)clients[idx]={...clients[idx],name,mobile,loanAmount:Number(loan),weeklyDue:Number(weekly),startDate,interestRate,photo:photoData||clients[idx].photo,notes};
+    saveData();showToast(name+" "+l("updated"));selectedId=editingClientId;editingClientId=null;goTo("page-clientDetail");
+  }else{
+    clients.unshift({id:Date.now().toString(),name,mobile,loanAmount:Number(loan),weeklyDue:Number(weekly),startDate,interestRate,photo:photoData,notes,payments:[],createdAt:today()});
+    saveData();showToast(name+" "+l("added"));editingClientId=null;goTo("page-home");
+  }
+}
+
+// ── CLIENT DETAIL ─────────────────────────────────────
+function renderDetail(){
+  const c=getClient();if(!c){goTo("page-home");return;}
+  document.getElementById("detail_name").textContent=c.name;
+  document.getElementById("cd-int").textContent=l("addInt");
+  document.getElementById("cd-pay").textContent="+ "+l("collected2");
+  const{totalPaid,balance,pending,nextDueDate,interestCharged,totalDue}=clientStats(c);
+  const diff=daysDiff(nextDueDate);
+  const pct=Math.min(100,Math.round((totalPaid/(totalDue||1))*100));
+  const dc=diff<=0?"#dc2626":diff<=2?"#ea580c":"#16a34a";
+  const db=diff<=0?"#fee2e2":diff<=2?"#ffedd5":"#dcfce7";
+  const av=c.photo?`<img src="${c.photo}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;border:3px solid #0f4c81;flex-shrink:0;"/>`:`<div style="width:64px;height:64px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid #0f4c81;flex-shrink:0;">👤</div>`;
+  document.getElementById("detailCard").innerHTML=`
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px;">${av}
+      <div><div style="font-size:18px;font-weight:900;">${c.name}</div>
+      <div style="font-size:13px;color:#64748b;">📞 ${c.mobile}</div>
+      <div style="font-size:12px;color:#64748b;">📅 ${c.startDate} | 📈 ${c.interestRate||2}%/week</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div class="stat-box" style="background:#fee2e2;"><div>💰</div><div style="font-size:16px;font-weight:900;color:#dc2626;">${fmtINR(c.loanAmount)}</div><div style="font-size:11px;color:#64748b;">${l("given")}</div></div>
+      <div class="stat-box" style="background:#dcfce7;"><div>✅</div><div style="font-size:16px;font-weight:900;color:#16a34a;">${fmtINR(totalPaid)}</div><div style="font-size:11px;color:#64748b;">${l("collected2")}</div></div>
+      <div class="stat-box" style="background:#fee2e2;"><div>🔴</div><div style="font-size:16px;font-weight:900;color:#dc2626;">${fmtINR(balance)}</div><div style="font-size:11px;color:#64748b;">${l("remaining2")}</div></div>
+      <div class="stat-box" style="background:#fff7ed;"><div>📈</div><div style="font-size:16px;font-weight:900;color:#ea580c;">${fmtINR(interestCharged)}</div><div style="font-size:11px;color:#64748b;">${l("totalInt")}</div></div>
+    </div>
+    ${interestCharged>0?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:#ea580c;font-weight:700;">📈 Total: ${fmtINR(totalDue)}</div>`:""}
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:12px;">${pct}${l("paidPct")}</div>
+    <div style="background:${db};border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:${pending>0?'10px':'0'};">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:${dc};">${diff<=0?l("late"):l("nextPay")}</div>
+        <div style="font-size:13px;font-weight:800;">${nextDueDate}${diff>0?" ("+diff+" "+l("daysLeft")+")":""}</div>
+      </div>
+      <button onclick="sendReminder()" style="background:#0f4c81;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;">${l("reminder")}</button>
+    </div>
+    ${pending>0?`<div style="background:#fee2e2;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><div style="font-size:13px;font-weight:700;color:#dc2626;">${l("pending")}: ${fmtINR(pending)}</div><button onclick="setPendingAndPay(${pending})" style="background:#dc2626;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;">${l("collect")}</button></div>`:""}
+  `;
+  const pays=[...(c.payments||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("paymentHistoryCard").innerHTML=`
+    <div style="font-weight:800;font-size:15px;margin-bottom:12px;">${l("payHistory")}</div>
+    ${pays.length===0?`<div style="color:#64748b;text-align:center;padding:20px;">${l("noPay")}</div>`:
+    pays.map(p=>{const isI=p.type==="interest";return`<div class="payment-row">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:${isI?"#fff7ed":"#dcfce7"};display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${isI?"📈":"✅"}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:${isI?"#ea580c":"#1e293b"};">${p.note||l("collected2")}${isI?` <span style="font-size:10px;background:#fff7ed;color:#ea580c;padding:1px 6px;border-radius:8px;border:1px solid #fed7aa;">${l("intTag")}</span>`:''}</div>
+          <div style="font-size:11px;color:#64748b;">${p.date}</div>
+          <div style="display:flex;gap:6px;margin-top:4px;">
+            ${!isI?`<button class="btn-edit-sm" onclick="startEditPayment('${p.id}')">${l("editBtn")}</button>`:""}
+            <button class="btn-red-sm" onclick="deletePayment('${p.id}')">${l("deleteBtn")}</button>
+          </div>
+        </div>
+        <div style="font-size:15px;font-weight:800;color:${isI?"#ea580c":"#16a34a"};white-space:nowrap;">+${fmtINR(p.amount)}</div>
+      </div>
+    </div>`;}).join("")}
+  `;
+}
+
+// ── ADD/EDIT PAYMENT ──────────────────────────────────
+function goToPayment(){
+  editingPaymentId=null;
+  document.getElementById("payPageTitle").textContent=l("addPay");
+  document.getElementById("savePayBtn").textContent=l("savePay");
+  document.getElementById("savePayBtn").style.background="#16a34a";
+  document.getElementById("whatsappNotice").style.display="block";
+  document.getElementById("quickChipsWrap").style.display="block";
+  document.getElementById("pf_amount").value="";
+  document.getElementById("pf_date").value=today();
+  document.getElementById("pf_note").value="";
+  goTo("page-addPayment");
+}
+function startEditPayment(payId){
+  const c=getClient();if(!c)return;
+  const p=c.payments.find(x=>x.id===payId);if(!p)return;
+  editingPaymentId=payId;
+  document.getElementById("payPageTitle").textContent=l("editPay");
+  document.getElementById("savePayBtn").textContent=l("updatePay");
+  document.getElementById("savePayBtn").style.background="#0f4c81";
+  document.getElementById("whatsappNotice").style.display="none";
+  document.getElementById("quickChipsWrap").style.display="none";
+  document.getElementById("pf_amount").value=p.amount;
+  document.getElementById("pf_date").value=p.date;
+  document.getElementById("pf_note").value=p.note||"";
+  goTo("page-addPayment");
+}
+function renderPaymentForm(){
+  const c=getClient();if(!c)return;
+  const{balance}=clientStats(c);
+  document.getElementById("pay_name").textContent=c.name;
+  document.getElementById("pay_balance").textContent=l("remaining")+": "+fmtINR(balance);
+  const av=document.getElementById("pay_avatar");
+  av.innerHTML=c.photo?`<img src="${c.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`:"👤";
+  document.getElementById("pf-ql").textContent=l("quickSel");
+  document.getElementById("pf-al").textContent=l("amtLbl");
+  document.getElementById("whatsappNotice").textContent=l("waNotice");
+  if(!editingPaymentId){
+    document.getElementById("pf_date").value=today();
+    const chips=[c.weeklyDue,c.weeklyDue*2,c.weeklyDue*4,balance].filter((v,i,a)=>v>0&&a.indexOf(v)===i);
+    document.getElementById("quickChips").innerHTML=chips.map(amt=>`<button class="quick-chip" onclick="setPayAmt(${amt},this)">${fmtINR(amt)}</button>`).join("");
+  }
+}
+function setPayAmt(amt,el){
+  document.getElementById("pf_amount").value=amt;
+  document.querySelectorAll(".quick-chip").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+}
+function savePayment(){
+  const c=getClient();if(!c)return;
+  const amount=document.getElementById("pf_amount").value;
+  const date=document.getElementById("pf_date").value||today();
+  const note=document.getElementById("pf_note").value.trim();
+  if(!amount||Number(amount)<=0){showToast(l("enterAmt"),"#dc2626");return;}
+  const idx=clients.findIndex(cl=>cl.id===selectedId);
+  if(editingPaymentId){
+    const pi=clients[idx].payments.findIndex(p=>p.id===editingPaymentId);
+    if(pi>=0)clients[idx].payments[pi]={...clients[idx].payments[pi],amount:Number(amount),date,note};
+    saveData();showToast(l("payUpdated"),"#0f4c81");editingPaymentId=null;goTo("page-clientDetail");
+  }else{
+    clients[idx].payments=[...(clients[idx].payments||[]),{id:Date.now().toString(),amount:Number(amount),date,note,type:"payment"}];
+    saveData();
+    const tp=clients[idx].payments.filter(p=>p.type!=="interest").reduce((s,p)=>s+Number(p.amount),0);
+    const ic=clients[idx].payments.filter(p=>p.type==="interest").reduce((s,p)=>s+Number(p.amount),0);
+    const bal=Number(clients[idx].loanAmount)+ic-tp;
+    const waMsg=lang==="ta"
+      ?`🙏 வணக்கம் ${c.name} அவர்களே!\n\n✅ கட்டணம் பெறப்பட்டது: ${fmtINR(amount)}\n📅 தேதி: ${date}\n\n💰 மொத்த கடன்: ${fmtINR(c.loanAmount)}\n${ic>0?`📈 வட்டி: ${fmtINR(ic)}\n`:""}\n✅ செலுத்தியது: ${fmtINR(tp)}\n🔴 மீதம்: ${fmtINR(bal)}\n\nநன்றி! 🙏`
+      :`🙏 Hello ${c.name}!\n\n✅ Payment Received: ${fmtINR(amount)}\n📅 Date: ${date}\n\n💰 Total Loan: ${fmtINR(c.loanAmount)}\n${ic>0?`📈 Interest: ${fmtINR(ic)}\n`:""}\n✅ Paid: ${fmtINR(tp)}\n🔴 Balance: ${fmtINR(bal)}\n\nThank you! 🙏`;
+    showToast(l("payAdded"));goTo("page-clientDetail");
+    const phone="91"+c.mobile.replace(/\D/g,"").slice(-10);
+    setTimeout(()=>window.open(`https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`,"_blank"),600);
+  }
+}
+
+// ── DELETE PAYMENT ────────────────────────────────────
+function deletePayment(payId){
+  showCenterModal(`<div style="font-size:32px;margin-bottom:8px;">🗑️</div>
+    <div style="font-weight:800;margin-bottom:6px;">${l("delPayTitle")}</div>
+    <div style="color:#64748b;font-size:13px;margin-bottom:18px;">${l("delPayMsg")}</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">${l("cancel")}</button>
+      <button style="flex:1;background:#dc2626;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;" onclick="doDeletePay('${payId}')">${l("del")}</button>
+    </div>`);
+}
+function doDeletePay(payId){
+  const idx=clients.findIndex(c=>c.id===selectedId);
+  if(idx>=0){clients[idx].payments=clients[idx].payments.filter(p=>p.id!==payId);saveData();}
+  closeModal();showToast(l("deleted"),"#64748b");renderDetail();
+}
+
+// ── INTEREST ──────────────────────────────────────────
+function addInterestCharge(){
+  const c=getClient();if(!c)return;
+  const rate=c.interestRate||settings.defaultInterest||2;
+  const{balance}=clientStats(c);
+  const lw=weeksLate(c);
+  const sug=Math.round(balance*(rate/100)*Math.max(1,lw));
+  showModal(`<div style="font-weight:800;font-size:17px;margin-bottom:4px;">${l("intTitle")}</div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:16px;">${c.name} - ${rate}%/week</div>
+    ${lw>0?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px;margin-bottom:14px;font-size:13px;color:#ea580c;">⚠️ <strong>${lw} ${l("weeksLate")}</strong><br/>${l("lateFee")}: ${fmtINR(sug)}</div>`:""}
+    <div style="margin-bottom:12px;"><label class="label">${l("intAmtLbl")}</label><input class="input-field" id="int_amount" type="number" value="${sug||""}"/></div>
+    <div style="margin-bottom:12px;"><label class="label">தேதி / Date</label><input class="input-field" id="int_date" type="date" value="${today()}"/></div>
+    <div style="margin-bottom:14px;"><label class="label">குறிப்பு / Note</label><input class="input-field" id="int_note" placeholder="${lw>0?lw+" "+l("weeksLate"):""}"/></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">${l("cancel")}</button>
+      <button style="flex:2;background:#ea580c;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;" onclick="saveInterest()">${l("addIntBtn")}</button>
+    </div>`);
+}
+function saveInterest(){
+  const amount=document.getElementById("int_amount").value;
+  const date=document.getElementById("int_date").value||today();
+  const note=document.getElementById("int_note").value.trim()||l("intTag");
+  if(!amount||Number(amount)<=0){showToast(l("intErr"),"#dc2626");return;}
+  const idx=clients.findIndex(c=>c.id===selectedId);
+  const c=clients[idx];
+  clients[idx].payments=[...(clients[idx].payments||[]),{id:Date.now().toString(),amount:Number(amount),date,note,type:"interest"}];
+  saveData();closeModal();
+  const{totalPaid,balance,interestCharged}=clientStats(clients[idx]);
+  const waMsg=lang==="ta"
+    ?`📈 வணக்கம் ${c.name} அவர்களே!\n\n⚠️ வட்டி கட்டணம் சேர்க்கப்பட்டது\n\n💸 வட்டி தொகை: ${fmtINR(amount)}\n📅 தேதி: ${date}\n📝 ${note}\n\n💰 மொத்த கடன்: ${fmtINR(c.loanAmount)}\n📈 மொத்த வட்டி: ${fmtINR(interestCharged)}\n🔴 மொத்த மீதம்: ${fmtINR(balance)}\n\nதயவுசெய்து விரைவாக செலுத்தவும்! 🙏`
+    :`📈 Hello ${c.name}!\n\n⚠️ Interest charge added\n\n💸 Interest: ${fmtINR(amount)}\n📅 Date: ${date}\n📝 ${note}\n\n💰 Total Loan: ${fmtINR(c.loanAmount)}\n📈 Total Interest: ${fmtINR(interestCharged)}\n🔴 Total Balance: ${fmtINR(balance)}\n\nPlease pay soon! 🙏`;
+  showToast(l("intAdded"),"#ea580c");renderDetail();
+  const phone="91"+c.mobile.replace(/\D/g,"").slice(-10);
+  setTimeout(()=>window.open(`https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`,"_blank"),600);
+}
+
+// ── DELETE CLIENT ─────────────────────────────────────
+function confirmDelete(){
+  const c=getClient();if(!c)return;
+  showCenterModal(`<div style="font-size:36px;margin-bottom:8px;">⚠️</div>
+    <div style="font-weight:800;font-size:16px;margin-bottom:6px;">${l("delTitle")}</div>
+    <div style="color:#64748b;font-size:13px;margin-bottom:20px;">${c.name} ${l("delMsg")}</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">${l("cancel")}</button>
+      <button style="flex:1;background:#dc2626;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;" onclick="doDelete()">${l("del")}</button>
+    </div>`);
+}
+function doDelete(){clients=clients.filter(c=>c.id!==selectedId);saveData();closeModal();showToast(l("deleted"),"#64748b");goTo("page-home");}
+
+// ── WHATSAPP ──────────────────────────────────────────
+function openWhatsApp(){const c=getClient();if(!c)return;window.open(`https://wa.me/91${c.mobile.replace(/\D/g,"").slice(-10)}`,"_blank");}
+function sendReminder(){
+  const c=getClient();if(!c)return;
+  const{balance,nextDueDate,pending,interestCharged}=clientStats(c);
+  const diff=daysDiff(nextDueDate);
+  const waMsg=lang==="ta"
+    ?`🔔 வணக்கம் ${c.name} அவர்களே!\n\n📢 வாராந்திர கட்டண நினைவூட்டல்\n\n💳 வாரத் தவணை: ${fmtINR(c.weeklyDue)}\n📅 கட்டண தேதி: ${nextDueDate}\n⏰ ${diff>0?diff+" நாட்களில் செலுத்தவும்":"இன்று செலுத்தவும்!"}\n\n💰 மொத்த கடன்: ${fmtINR(c.loanAmount)}\n${interestCharged>0?`📈 வட்டி: ${fmtINR(interestCharged)}\n`:""}\n🔴 மீதம்: ${fmtINR(balance)}\n${pending>0?`⚠️ நிலுவை: ${fmtINR(pending)}\n`:""}\nநன்றி! 🙏`
+    :`🔔 Hello ${c.name}!\n\n📢 Weekly Payment Reminder\n\n💳 Weekly EMI: ${fmtINR(c.weeklyDue)}\n📅 Due Date: ${nextDueDate}\n⏰ ${diff>0?diff+" days left":"Pay today!"}\n\n💰 Total Loan: ${fmtINR(c.loanAmount)}\n${interestCharged>0?`📈 Interest: ${fmtINR(interestCharged)}\n`:""}\n🔴 Balance: ${fmtINR(balance)}\n${pending>0?`⚠️ Pending: ${fmtINR(pending)}\n`:""}\nThank you! 🙏`;
+  window.open(`https://wa.me/91${c.mobile.replace(/\D/g,"").slice(-10)}?text=${encodeURIComponent(waMsg)}`,"_blank");
+  showToast(l("reminder"));
+}
+function setPendingAndPay(amt){goToPayment();setTimeout(()=>document.getElementById("pf_amount").value=amt,100);}
+
+// ── BACKUP ────────────────────────────────────────────
+function getBackupJSON(){return JSON.stringify({clients,exportedAt:new Date().toISOString(),version:"5.0"},null,2);}
+function getBackupSummary(){
+  const tL=clients.reduce((s,c)=>s+Number(c.loanAmount),0);
+  const tP=clients.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.type!=="interest").reduce((a,p)=>a+Number(p.amount),0),0);
+  const tI=clients.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.type==="interest").reduce((a,p)=>a+Number(p.amount),0),0);
+  return `📊 LOGO Finance - Backup\n📅 ${new Date().toLocaleDateString()}\n\n👥 Clients: ${clients.length}\n💰 ${l("totalLoan")}: ${fmtINR(tL)}\n📈 ${l("interest")}: ${fmtINR(tI)}\n✅ ${l("collected")}: ${fmtINR(tP)}\n🔴 ${l("balance")}: ${fmtINR(tL+tI-tP)}\n\n━━━━━━━━\n${clients.map(c=>{const{totalPaid,balance,interestCharged}=clientStats(c);return`👤 ${c.name} (${c.mobile})\n   ${fmtINR(c.loanAmount)} | ${l("interest")}: ${fmtINR(interestCharged)} | ${l("balance")}: ${fmtINR(balance)}`;}).join("\n")}\n━━━━━━━━\n✅ Done!`;}
+function addBackupLog(type){
+  const log={type,date:new Date().toLocaleString(),ts:Date.now()};
+  backupHistory.unshift(log);if(backupHistory.length>10)backupHistory=backupHistory.slice(0,10);
+  localStorage.setItem("sfm_backupHistory",JSON.stringify(backupHistory));
+  localStorage.setItem("sfm_lastBackup",log.date);
+  renderBackupHistory();
+  const el=document.getElementById("lastBackupLabel");if(el)el.textContent=l("backupPrefix")+log.date;
+}
+function backupWhatsApp(){
+  if(!settings.ownerMobile){showToast(l("waNoNum"),"#ea580c");switchTab("settings");return;}
+  backupDL(true);
+  const phone="91"+settings.ownerMobile.replace(/\D/g,"").slice(-10);
+  setTimeout(()=>{window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getBackupSummary())}`,"_blank");addBackupLog("WhatsApp");showToast(l("waDone"));},500);
+}
+function backupGoogleDrive(){
+  backupDL(true);
+  showCenterModal(`<div style="font-size:36px;margin-bottom:12px;">📁</div>
+    <div style="font-weight:800;font-size:16px;margin-bottom:8px;">${l("gdTitle")}</div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:16px;line-height:1.8;">${l("gdSteps")}</div>
+    <button class="btn-primary" onclick="window.open('https://drive.google.com','_blank');closeModal()">${l("gdOpen")}</button>
+    <div style="margin-top:10px;"><button class="btn-outline" style="width:100%;justify-content:center;" onclick="closeModal()">${l("ok")}</button></div>`);
+  addBackupLog("Google Drive");
+}
+function backupEmail(){
+  if(!settings.ownerEmail){showToast(l("emNoAddr"),"#ea580c");switchTab("settings");return;}
+  window.open(`mailto:${settings.ownerEmail}?subject=${encodeURIComponent("LOGO Finance Backup "+new Date().toLocaleDateString())}&body=${encodeURIComponent(getBackupSummary())}`);
+  addBackupLog("Email");showToast(l("emDone"));
+}
+function backupDownload(){backupDL(false);addBackupLog("Download");showToast(l("dlDone"));}
+function backupDL(silent){
+  const blob=new Blob([getBackupJSON()],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download=`logo-finance-${today()}.json`;a.click();URL.revokeObjectURL(url);
+}
+function restoreBackup(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{const data=JSON.parse(e.target.result);if(!data.clients)throw new Error();
+      showCenterModal(`<div style="font-size:36px;margin-bottom:8px;">🔄</div>
+        <div style="font-weight:800;margin-bottom:6px;">${l("restoreTitle")}</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:18px;">${data.clients.length} ${l("restoreMsg")}</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">${l("cancel")}</button>
+          <button style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;" onclick="doRestore()">${l("restoreBtn")}</button>
+        </div>`);
+      window._rd=data.clients;
+    }catch(e){showToast(l("badFile"),"#dc2626");}
+  };reader.readAsText(file);input.value="";
+}
+function doRestore(){clients=window._rd||[];saveData();closeModal();showToast(clients.length+" "+l("restoreDone"));goTo("page-home");}
+function renderBackupHistory(){
+  const el=document.getElementById("backupHistory");if(!el)return;
+  const icons={WhatsApp:"💬",Email:"📧","Google Drive":"📁",Download:"⬇️"};
+  el.innerHTML=backupHistory.length?backupHistory.map(log=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;">
+      <div style="width:36px;height:36px;border-radius:10px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:18px;">${icons[log.type]||"☁️"}</div>
+      <div><div style="font-size:13px;font-weight:700;">${log.type}</div><div style="font-size:11px;color:#64748b;">${log.date}</div></div>
+      <div style="margin-left:auto;font-size:11px;background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:10px;font-weight:700;">✓</div>
+    </div>`).join(""):`<div style="color:#64748b;font-size:13px;text-align:center;padding:16px;">${l("noBackup")}</div>`;
+}
+function clearAllData(){
+  showCenterModal(`<div style="font-size:36px;margin-bottom:8px;">🗑️</div>
+    <div style="font-weight:800;margin-bottom:6px;">${l("delAll")}</div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:18px;">${l("delAllMsg")}</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">${l("cancel")}</button>
+      <button style="flex:1;background:#dc2626;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;" onclick="clients=[];saveData();closeModal();showToast(l('delAllDone'),'#64748b');goTo('page-home')">${l("del")}</button>
+    </div>`);
+}
+
+// ── MODAL & TOAST ─────────────────────────────────────
+function showModal(html){
+  const m=document.getElementById("modal"),mc=document.getElementById("modalContent");
+  mc.className="modal";mc.innerHTML=html;m.style.display="flex";m.style.alignItems="flex-end";
+}
+function showCenterModal(html){
+  const m=document.getElementById("modal"),mc=document.getElementById("modalContent");
+  mc.className="modal modal-center";mc.innerHTML=html;m.style.display="flex";m.style.alignItems="center";
+}
+function closeModal(){document.getElementById("modal").style.display="none";}
+function handleOverlayClick(e){if(e.target===document.getElementById("modal"))closeModal();}
+let tt=null;
+function showToast(msg,color="#16a34a"){
+  const t=document.getElementById("toast");t.textContent=msg;t.style.background=color;t.style.display="block";t.style.opacity="1";
+  if(tt)clearTimeout(tt);
+  tt=setTimeout(()=>{t.style.opacity="0";setTimeout(()=>t.style.display="none",300);},3000);
+}
+
+// ── INIT ──────────────────────────────────────────────
+loadData();
+document.getElementById("homeFab").onclick=goToAddClient;
+applyLang();
+setLang(lang);
+
+// Show guide for first time, else go to home
+if(settings.firstTime!==false){
+  document.getElementById("page-guide").classList.add("active");
+}else{
+  goTo("page-home");
+}
+
+if(settings.reminderOn){
+  const lb=localStorage.getItem("sfm_lastBackup");
+  if(!lb||!lb.includes(new Date().toLocaleDateString()))
+    setTimeout(()=>showToast(l("reminderMsg"),"#ea580c"),3000);
+}
+</script>
+</body>
+</html>
